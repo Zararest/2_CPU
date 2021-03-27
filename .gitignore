@@ -1,0 +1,9 @@
+input.txt
+table_class.o
+array_class.o
+assembler.o
+stack_class.o
+CPU_class.o
+asm.o
+CPU.o
+machine_commands.bin
