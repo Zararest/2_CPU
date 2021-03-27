@@ -1,5 +1,5 @@
 #include "headers/commands.h"
-#include "headers/stack_class.h"
+//#include "headers/stack_class.h"
 #include "headers/CPU_class.h"
 
 
