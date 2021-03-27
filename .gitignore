@@ -4,6 +4,8 @@ array_class.o
 assembler.o
 stack_class.o
 CPU_class.o
-asm.o
-CPU.o
+asm
+CPU
 machine_commands.bin
+.vscode/tasks.json
+.vscode/launch.json
