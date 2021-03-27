@@ -8,7 +8,7 @@
 #include <cassert>
 
 
-const int MAXLEN = 100;
+
 
 enum Commands {
                                                    //���������� ����������: //����� ��� ����� ������������

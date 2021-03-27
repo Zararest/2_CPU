@@ -23,6 +23,10 @@ stack_class.o: headers/stack_class.cpp
 CPU_class.o: headers/CPU_class.cpp
 	g++ -c headers/CPU_class.cpp
 
+.PHONY : git_commit
+git_commit:
+	git add . 
+	git commit -m "This was automatic commit"
 
 .PHONY : clean
 clean:

@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <iostream>
 
+const int MAXLEN = 100;
+
 class array_of_commands{
 
 public:

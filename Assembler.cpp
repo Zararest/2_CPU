@@ -2,6 +2,7 @@
 #include "headers/table_class.h"
 #include "headers/array_class.h"
 
+
 int length(char* line){
 
     int i = 0;
