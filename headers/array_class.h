@@ -1,3 +1,6 @@
+#ifndef ARRAY_CLASS_H
+#define ARRAY_CLASS_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -18,3 +21,5 @@ public:
     double* element_access(int);
     double* return_array_of_commands();
 };
+
+#endif

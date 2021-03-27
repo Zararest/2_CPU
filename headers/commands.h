@@ -1,3 +1,6 @@
+#ifndef COMMANDS_H
+#define COMMANDS_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -74,3 +77,5 @@ enum Registers {
     PRIV_F = 150,   //��������� ������� P_F
     PRIV_R = 151,   //��������� ������� P_R
 };
+
+#endif

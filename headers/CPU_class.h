@@ -56,4 +56,3 @@ public:
     void class_clean();
  
 };
-

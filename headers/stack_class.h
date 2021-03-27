@@ -1,3 +1,6 @@
+#ifndef STACK_CLASS_H
+#define STACK_CLASS_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -20,6 +23,7 @@ typedef struct stack_struct
 
 /*template <typename T>
 int push(my_stack*, T);*/
+
 int push(my_stack*, double);
 
 my_stack* stack_create(int, int, int);
@@ -34,12 +38,10 @@ int silent_ok(my_stack*);
 int stack_recovery(my_stack*);
 void stack_destruct(my_stack*);
 
-/*void print_double(unsigned char* elem)
-{
-    printf("%lf", *( (double*) elem ));
-}*/
+
 
 //спросить как работать с темплейтами 
 
 //template <typename T> тут был пуш
 
+#endif

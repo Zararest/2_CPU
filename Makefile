@@ -1,5 +1,5 @@
 obj_assembler = table_class.o array_class.o assembler.o
-obj_cpu = stack_class.o CPU_class.o
+obj_cpu = stack_class.o CPU_class.o CPU.o
 
 asm: $(obj_assembler)
 	g++ -o asm $(obj_assembler)
@@ -14,7 +14,7 @@ assembler.o: assembler.cpp
 	g++ -c assembler.cpp
 
 	
-CPU: $(obj_cpu)
+my_CPU: $(obj_cpu)
 	g++ -o CPU $(obj_cpu)	
 
 stack_class.o: headers/stack_class.cpp
@@ -22,6 +22,9 @@ stack_class.o: headers/stack_class.cpp
 
 CPU_class.o: headers/CPU_class.cpp
 	g++ -c headers/CPU_class.cpp
+
+CPU.0: CPU.cpp CPU_class.cpp
+	g++ -c CPU.cpp
 
 .PHONY : git_commit
 git_commit:

@@ -1,5 +1,6 @@
 #include "CPU_class.h"
 
+
 CPU_class::CPU_class(int size_of_stack, int size_of_machine_code){
 
         stack = stack_create(size_of_stack, sizeof(double), 1);
