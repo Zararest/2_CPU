@@ -18,6 +18,17 @@ CPU_class::CPU_class(int size_of_stack, int size_of_machine_code){
         segment_private = (double*) calloc(2, sizeof(double));
     }
 
+CPU_class::~CPU_class(){
+
+        printf("destructor was called\n");
+        stack_destruct(stack);
+        free(machine_code);
+        free(memory);
+        free(byte_segment);
+        free(word_segment);
+        free(double_word_segment);
+        free(segment_private);
+    }
 
 int CPU_class::get_reg_data(double reg_number_double){
 
@@ -456,16 +467,5 @@ void CPU_class::processor(int num_of_comands){//это надо сунуть в 
     //--------
 
     }
-}
-
-CPU_class::~CPU_class(){
-
-        printf("destructor was called\n");
-        /*stack_destruct(stack);
-        free(machine_code);
-        free(memory);
-        free(byte_segment);
-        free(word_segment);
-        free(double_word_segment);
-        free(segment_private);*/
     }
+

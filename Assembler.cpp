@@ -5,7 +5,26 @@
 
 CREATE_LOG("asm_log.txt");
 
+#define COMMAND_WITH_NO_PARAM(command_number) machine_code.add_command(0, command_number);\
+                                              machine_code.increase_pointer(1);\
+                                              not_a_command = 0;\
 
+#define COMMAND_JUMP(command_number) machine_code.add_command(0, command_number);\
+                                     machine_code.increase_pointer(1);\
+                                     word = strtok(NULL, delim);\
+                                     MY_ASSERT(word != NULL, COMMAND_IS_NULL);\
+                                     table_of_jmps.add_new_obj(word, machine_code.element_access(0));\
+                                     machine_code.increase_pointer(1);\
+                                     not_a_command = 0;
+
+#define COMMAND_WITH_REG_PARAM(command_number) machine_code.add_command(0, command_number);\
+                                               machine_code.increase_pointer(1);\
+                                               word = strtok(NULL, delim);\
+                                               MY_ASSERT(word != NULL, COMMAND_IS_NULL);\
+                                               MY_ASSERT(find_register(word) != -1, WRONG_REG_NAME);\
+                                               machine_code.add_command(0, find_register(word));\
+                                               machine_code.increase_pointer(1);\
+                                               not_a_command = 0;
 
 int length(char* line){
 
@@ -28,7 +47,6 @@ int find_register(char* word) {
             } else{
                 return -1;
             }
-            
         }
 
         if ( (word[0] == 'W') && (word[2] >= 'A') && (word[2] <= 'D') ) {
@@ -38,7 +56,6 @@ int find_register(char* word) {
             } else{
                 return -1;
             }
-            
         }
 
         if ( (word[0] == 'D') && (word[2] >= 'A') && (word[2] <= 'E') ) {
@@ -48,7 +65,6 @@ int find_register(char* word) {
             } else{
                 return -1;
             }
-            
         }
 
         if (word[0] == 'P') {
@@ -62,7 +78,6 @@ int find_register(char* word) {
 
                 return PRIV_R;
             }
-
         }
 
     } else {
@@ -283,214 +298,115 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
 
         if (strcmp(word, "PUSH") == 0){
 
-            machine_code.add_command(0, CPU_PUSH);
-            machine_code.increase_pointer(1);
-
-            word = strtok(NULL, delim);
-            MY_ASSERT(find_register(word) != -1, WRONG_REG_NAME);
-            machine_code.add_command(0, find_register(word));
-            machine_code.increase_pointer(1);
-
-            not_a_command = 0;
+            COMMAND_WITH_REG_PARAM(CPU_PUSH);
             ADD_TO_LOG("PUSH", machine_code.pointer);
         }
 
         if (strcmp(word, "POP") == 0){
 
-            machine_code.add_command(0, CPU_POP);
-            machine_code.increase_pointer(1);
-
-            word = strtok(NULL, delim);
-            MY_ASSERT(find_register(word) != -1, WRONG_REG_NAME);
-            machine_code.add_command(0, find_register(word));
-            machine_code.increase_pointer(1);
-
-            not_a_command = 0;
+            COMMAND_WITH_REG_PARAM(CPU_POP);
             ADD_TO_LOG("POP", machine_code.pointer);
         }
 
         if (strcmp(word, "IN") == 0){
 
-            machine_code.add_command(0, CPU_IN);
-            machine_code.increase_pointer(1);
-
-            word = strtok(NULL, delim);
-            MY_ASSERT(word != NULL, COMMAND_IS_NULL);
-            MY_ASSERT(find_register(word) != -1, WRONG_REG_NAME);
-            machine_code.add_command(0, find_register(word));
-            machine_code.increase_pointer(1);
-
-            not_a_command = 0;
+            COMMAND_WITH_REG_PARAM(CPU_IN);
             ADD_TO_LOG("IN", machine_code.pointer);
         }
 
         if (strcmp(word, "GET") == 0){
 
-            machine_code.add_command(0, CPU_GET);
-            machine_code.increase_pointer(1);
-
-            word = strtok(NULL, delim);
-            MY_ASSERT(word != NULL, COMMAND_IS_NULL);
-            MY_ASSERT(find_register(word) != -1, WRONG_REG_NAME);
-            machine_code.add_command(0, find_register(word));
-            machine_code.increase_pointer(1);
-
-            not_a_command = 0;
+            COMMAND_WITH_REG_PARAM(CPU_GET);
             ADD_TO_LOG("GET", machine_code.pointer);
         }
 
         if (strcmp(word, "ADD") == 0){
 
-            machine_code.add_command(0, CPU_ADD);
-            machine_code.increase_pointer(1);
-
-            not_a_command = 0;
+            COMMAND_WITH_NO_PARAM(CPU_ADD);
             ADD_TO_LOG("ADD", machine_code.pointer);
         }
 
         if (strcmp(word, "SUB") == 0){
 
-            machine_code.add_command(0, CPU_SUB);
-            machine_code.increase_pointer(1);
-
-            not_a_command = 0;
+            COMMAND_WITH_NO_PARAM(CPU_SUB);
             ADD_TO_LOG("SUB", machine_code.pointer);
         }
 
         if (strcmp(word, "DIV") == 0){
 
-            machine_code.add_command(0, CPU_DIV);
-            machine_code.increase_pointer(1);
-
-            not_a_command = 0;
+            COMMAND_WITH_NO_PARAM(CPU_DIV);
             ADD_TO_LOG("DIV", machine_code.pointer);
         }
 
         if (strcmp(word, "MUL") == 0){
 
-            machine_code.add_command(0, CPU_MUL);
-            machine_code.increase_pointer(1);
-
-            not_a_command = 0;
+            COMMAND_WITH_NO_PARAM(CPU_MUL);
             ADD_TO_LOG("MUL", machine_code.pointer);
         }
 
         if (strcmp(word, "CMP") == 0){
 
-            machine_code.add_command(0, CPU_CMP);
-            machine_code.increase_pointer(1);
-
-            not_a_command = 0;
+            COMMAND_WITH_NO_PARAM(CPU_CMP);
             ADD_TO_LOG("CMP", machine_code.pointer);
         }
 
         if (strcmp(word, "OUT") == 0){
 
-            machine_code.add_command(0, CPU_OUT);
-            machine_code.increase_pointer(1);
-
-            not_a_command = 0;
+            COMMAND_WITH_NO_PARAM(CPU_OUT);
             ADD_TO_LOG("OUT", machine_code.pointer);
         }
 
         if (strcmp(word, "OUT_CHR") == 0){
 
-            machine_code.add_command(0, CPU_OUT_CHR);
-            machine_code.increase_pointer(1);
-
-            not_a_command = 0;
+            COMMAND_WITH_NO_PARAM(CPU_OUT_CHR);
             ADD_TO_LOG("OUT_CHAR", machine_code.pointer);
         }
 
         if (strcmp(word, "HLT") == 0){
 
-            machine_code.add_command(0, CPU_HLT);
-            machine_code.increase_pointer(1);
-
-            not_a_command = 0;
+            COMMAND_WITH_NO_PARAM(CPU_HLT);
             ADD_TO_LOG("HLT", machine_code.pointer);
         }
 
         if (strcmp(word, "NOP") == 0){
 
-            machine_code.add_command(0, NOP);
-            machine_code.increase_pointer(1);
-
-            not_a_command = 0;
+            COMMAND_WITH_NO_PARAM(NOP);
             ADD_TO_LOG("NOP", machine_code.pointer);
         }
 
         if (strcmp(word, "END") == 0){
 
-            machine_code.add_command(0, END);
-            machine_code.increase_pointer(1);
-
-            not_a_command = 0;
+            COMMAND_WITH_NO_PARAM(END);
             ADD_TO_LOG("END", machine_code.pointer);
         }
 
         if (strcmp(word, "FSQRT") == 0){
 
-            machine_code.add_command(0, CPU_FSQRT);
-            machine_code.increase_pointer(1);
-
-            not_a_command = 0;
+            COMMAND_WITH_NO_PARAM(CPU_FSQRT);
             ADD_TO_LOG("FSQRT", machine_code.pointer);
         }
 
         if (strcmp(word, "JL") == 0){
 
-            machine_code.add_command(0, CPU_JL);
-            machine_code.increase_pointer(1);
-
-            word = strtok(NULL, delim);
-            MY_ASSERT(word != NULL, COMMAND_IS_NULL);
-            table_of_jmps.add_new_obj(word, machine_code.element_access(0));
-            machine_code.increase_pointer(1);
-
-            not_a_command = 0;
+            COMMAND_JUMP(CPU_JL);
             ADD_TO_LOG("JL", machine_code.pointer);
         }
 
         if (strcmp(word, "JG") == 0){
 
-            machine_code.add_command(0, CPU_JG);
-            machine_code.increase_pointer(1);
-
-            word = strtok(NULL, delim);
-            MY_ASSERT(word != NULL, COMMAND_IS_NULL);
-            table_of_jmps.add_new_obj(word, machine_code.element_access(0));
-            machine_code.increase_pointer(1);
-
-            not_a_command = 0;
+            COMMAND_JUMP(CPU_JG);
             ADD_TO_LOG("JG", machine_code.pointer);
         }
 
         if (strcmp(word, "JE") == 0){
 
-            machine_code.add_command(0, CPU_JE);
-            machine_code.increase_pointer(1);
-
-            word = strtok(NULL, delim);
-            MY_ASSERT(word != NULL, COMMAND_IS_NULL);
-            table_of_jmps.add_new_obj(word, machine_code.element_access(0));
-            machine_code.increase_pointer(1);
-
-            not_a_command = 0;
+            COMMAND_JUMP(CPU_JE);
             ADD_TO_LOG("JE", machine_code.pointer);
         }
 
         if (strcmp(word, "JN") == 0){
 
-            machine_code.add_command(0, CPU_JN);
-            machine_code.increase_pointer(1);
-
-            word = strtok(NULL, delim);
-            MY_ASSERT(word != NULL, COMMAND_IS_NULL);
-            table_of_jmps.add_new_obj(word, machine_code.element_access(0));
-            machine_code.increase_pointer(1);
-
-            not_a_command = 0;
+            COMMAND_JUMP(CPU_JN);
             ADD_TO_LOG("JN", machine_code.pointer);
         }
 

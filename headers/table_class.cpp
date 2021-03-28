@@ -1,6 +1,5 @@
 #include "table_class.h" 
 
-
 table_of_matches::table_of_matches(){
 
         array_undef_obj = NULL;

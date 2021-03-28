@@ -28,5 +28,4 @@ double* array_of_commands::return_array_of_commands(){
 
 array_of_commands::~array_of_commands(){
 
-        printf("destructor was called\n");
     }
