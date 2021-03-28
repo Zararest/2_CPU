@@ -1,40 +1,54 @@
 #include "headers/commands.h"
 #include "headers/table_class.h"
 #include "headers/array_class.h"
+#include "headers/log.h"
+
+CREATE_LOG("asm_log.txt");
+
 
 
 int length(char* line){
 
     int i = 0;
-    printf("in len i = %i\n", i);
     while (line[i] != '\0'){
 
         i++;
     }
-
     return i;
 }
 
 int find_register(char* word) {
 
-    printf("dafuq\n");
-    printf("len = %i\n", length(word));
     if ( (length(word) == 3) && (word[1] == '_') ) {
 
         if ( (word[0] == 'B') && (word[2] >= 'A') && (word[2] <= 'C') ) {
-
-            return PUBL_B_A + (word[2] - 'A');
+            
+            if ((word[2] - 'A') <= NUMBER_B_REGISTERS){
+                return PUBL_B_A + (word[2] - 'A');
+            } else{
+                return -1;
+            }
+            
         }
 
         if ( (word[0] == 'W') && (word[2] >= 'A') && (word[2] <= 'D') ) {
 
-            return PUBL_W_A + (word[2] - 'A');
+            if ((word[2] - 'A') <= NUMBER_W_REGISTERS){
+                return PUBL_W_A + (word[2] - 'A');
+            } else{
+                return -1;
+            }
+            
         }
 
         if ( (word[0] == 'D') && (word[2] >= 'A') && (word[2] <= 'E') ) {
 
-            return PUBL_DW_A + (word[2] - 'A');
-
+            if ((word[2] - 'A') <= NUMBER_W_REGISTERS){
+                return PUBL_DW_A + (word[2] - 'A');
+            } else{
+                return -1;
+            }
+            
         }
 
         if (word[0] == 'P') {
@@ -55,7 +69,7 @@ int find_register(char* word) {
 
         return -1;
     }
-        return -1;
+    return -1;
 }
 
 char* fill_buffer(char name_of_input_file[MAXLEN], int* word_counter) {
@@ -65,16 +79,10 @@ char* fill_buffer(char name_of_input_file[MAXLEN], int* word_counter) {
     stat(name_of_input_file, &statistika);
 
     char* buffer = (char*) calloc(statistika.st_size + 1, sizeof(char));
-    if (buffer == NULL) {
-
-        printf("troubles with memory\n");
-        return NULL;
-    }
+    MY_ASSERT(buffer != NULL, MEMORY_IS_NULL);
 
     FILE* p_input = fopen(name_of_input_file, "r");
-    if (p_input == NULL) {
-        return NULL;
-    }
+    MY_ASSERT(p_input != NULL, FILE_IS_NULL);
 
     char symbol = fgetc(p_input);
 
@@ -107,15 +115,8 @@ void name_of_link(char* tmp){
 
     int i = 0, len = length(tmp);
 
-    if (tmp[len - 1] == ':'){
-
-        tmp[len - 1] = '\0';
-    } else{
-
-        printf("this [%s] isn't a link\n", tmp);
-        exit(2);
-    }
-
+    MY_ASSERT(tmp[len - 1] == ':', WRONG_LINK);
+    tmp[len - 1] = '\0';
 }
 
 char* name_of_modif(char* word){
@@ -127,15 +128,9 @@ char* name_of_modif(char* word){
         i++;
     }
 
-    if (i == 7){
-
-        printf("incorrect modif\n");
-        exit(10);
-    } else{
-
-        word[i] = '\0';
-        return word;
-    }
+    MY_ASSERT(i != 7, WRONG_MODIFICATOR);
+    word[i] = '\0';
+    return word;
 }
 
 
@@ -148,7 +143,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
     int not_a_command = 0, word_has_been_already_been_read = 0, data_pointer = 0, var_was_def = 0;
     double* prev_func_jmp = 0;
     char* buffer = fill_buffer(name_of_input_file, num_of_comands);
-    assert(buffer != NULL);
+    MY_ASSERT(buffer != NULL, FILL_BUFFER_TROUBLE);
     char delim[4] = " ";
     char* word = strtok(buffer, delim);
     char* name_of_var = NULL;
@@ -162,11 +157,11 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
     while (NULL != word) {
 
         not_a_command = 1;
-        printf("command pointer = %i\n", machine_code.pointer);
+        
         if (strcmp(word, "function") == 0){
 
             word = strtok(NULL, delim);
-
+            MY_ASSERT(word != NULL, COMMAND_IS_NULL);
             table_of_func.add_defin_of_obj(word, (double)machine_code.pointer);
 
             machine_code.add_command(0, CPU_FUNC_JMP);
@@ -174,6 +169,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(2);
 
             not_a_command = 0;
+            ADD_TO_LOG("function", machine_code.pointer);
         }
 
         if (strcmp(word, "RET") == 0){
@@ -184,6 +180,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             *(prev_func_jmp) = (double)machine_code.pointer;
 
             not_a_command = 0;
+            ADD_TO_LOG("RET", machine_code.pointer);
         }
 
         if (strcmp(word, "CALL") == 0){
@@ -192,10 +189,12 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             word = strtok(NULL, delim);
+            MY_ASSERT(word != NULL, COMMAND_IS_NULL);
             table_of_func.add_new_obj(word, machine_code.element_access(0));
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("CALL", machine_code.pointer);
         }
 
         if (word[0] == '@'){
@@ -206,12 +205,11 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             table_of_jmps.add_defin_of_obj(word + 1, (double)machine_code.pointer);
 
             not_a_command = 0;
+            ADD_TO_LOG("linc_dif", machine_code.pointer);
         }
 
         if (strcmp(word, "MOV") == 0) {
 
-            not_a_command = 0;
-            printf("still here\n");
             machine_code.increase_pointer(1);
 
             word = strtok(NULL, delim);
@@ -222,6 +220,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
                 machine_code.increase_pointer(1);
 
                 word = strtok(NULL, delim);
+                MY_ASSERT(word != NULL, COMMAND_IS_NULL);
                 if ( ( (word[0] >= '0') && (word[0] <= '9') ) || ((word[1] >= '0') && (word[1] <= '9')) ) {
 
                     machine_code.add_command(0,  strtod(word, NULL));
@@ -236,11 +235,12 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
                     if (word[length(word) + 1] == '['){
 
                         word = strtok(NULL, delim);
+                        MY_ASSERT(word != NULL, COMMAND_IS_NULL);
                         word = name_of_modif(word + 1);
-                        assert(find_register(word) != -1);
+                        MY_ASSERT(find_register(word) != -1, WRONG_REG_NAME);
 
-                        machine_code.add_command(0, find_register(word));// !!!!!!!!!!!!!!! ������������ ������ ����� ��������
-                        machine_code.increase_pointer(1);// !!!!!!!!!!!!!!
+                        machine_code.add_command(0, find_register(word));
+                        machine_code.increase_pointer(1);
                     } else{
 
                         machine_code.add_command(0, 0);
@@ -257,11 +257,12 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
                 if (word[length(word) + 1] == '['){
 
                     word = strtok(NULL, delim);
+                    MY_ASSERT(word != NULL, COMMAND_IS_NULL);
                     word = name_of_modif(word + 1);
-                    assert(find_register(word) != -1);
+                    MY_ASSERT(find_register(word) != -1, WRONG_MODIFICATOR);
 
-                    machine_code.add_command(0, find_register(word));// !!!!!!!!!!!!!!! ������������ ������ ����� ��������
-                    machine_code.increase_pointer(1);// !!!!!!!!!!!!!!
+                    machine_code.add_command(0, find_register(word));
+                    machine_code.increase_pointer(1);
                 } else{
 
                     machine_code.add_command(0, 0);
@@ -269,14 +270,15 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
                 }
 
                 word = strtok(NULL, delim);
-                //printf("not here and find register = %i\n", find_register(word));
-                assert(find_register(word) != -1);
+                MY_ASSERT(find_register(word) != -1, WRONG_MODIFICATOR);
 
                 machine_code.add_command(0, find_register(word));
                 machine_code.increase_pointer(1);
 
             }
 
+            not_a_command = 0;
+            ADD_TO_LOG("MOV", machine_code.pointer);
         }
 
         if (strcmp(word, "PUSH") == 0){
@@ -285,11 +287,12 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             word = strtok(NULL, delim);
-            assert(find_register(word) != -1);
+            MY_ASSERT(find_register(word) != -1, WRONG_REG_NAME);
             machine_code.add_command(0, find_register(word));
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("PUSH", machine_code.pointer);
         }
 
         if (strcmp(word, "POP") == 0){
@@ -298,11 +301,12 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             word = strtok(NULL, delim);
-            assert(find_register(word) != -1);
+            MY_ASSERT(find_register(word) != -1, WRONG_REG_NAME);
             machine_code.add_command(0, find_register(word));
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("POP", machine_code.pointer);
         }
 
         if (strcmp(word, "IN") == 0){
@@ -311,11 +315,13 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             word = strtok(NULL, delim);
-            assert(find_register(word) != -1);
+            MY_ASSERT(word != NULL, COMMAND_IS_NULL);
+            MY_ASSERT(find_register(word) != -1, WRONG_REG_NAME);
             machine_code.add_command(0, find_register(word));
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("IN", machine_code.pointer);
         }
 
         if (strcmp(word, "GET") == 0){
@@ -324,11 +330,13 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             word = strtok(NULL, delim);
-            assert(find_register(word) != -1);
+            MY_ASSERT(word != NULL, COMMAND_IS_NULL);
+            MY_ASSERT(find_register(word) != -1, WRONG_REG_NAME);
             machine_code.add_command(0, find_register(word));
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("GET", machine_code.pointer);
         }
 
         if (strcmp(word, "ADD") == 0){
@@ -337,6 +345,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("ADD", machine_code.pointer);
         }
 
         if (strcmp(word, "SUB") == 0){
@@ -345,6 +354,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("SUB", machine_code.pointer);
         }
 
         if (strcmp(word, "DIV") == 0){
@@ -353,6 +363,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("DIV", machine_code.pointer);
         }
 
         if (strcmp(word, "MUL") == 0){
@@ -361,6 +372,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("MUL", machine_code.pointer);
         }
 
         if (strcmp(word, "CMP") == 0){
@@ -369,6 +381,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("CMP", machine_code.pointer);
         }
 
         if (strcmp(word, "OUT") == 0){
@@ -377,6 +390,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("OUT", machine_code.pointer);
         }
 
         if (strcmp(word, "OUT_CHR") == 0){
@@ -385,6 +399,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("OUT_CHAR", machine_code.pointer);
         }
 
         if (strcmp(word, "HLT") == 0){
@@ -393,6 +408,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("HLT", machine_code.pointer);
         }
 
         if (strcmp(word, "NOP") == 0){
@@ -401,6 +417,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("NOP", machine_code.pointer);
         }
 
         if (strcmp(word, "END") == 0){
@@ -409,6 +426,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("END", machine_code.pointer);
         }
 
         if (strcmp(word, "FSQRT") == 0){
@@ -417,6 +435,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("FSQRT", machine_code.pointer);
         }
 
         if (strcmp(word, "JL") == 0){
@@ -425,10 +444,12 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             word = strtok(NULL, delim);
+            MY_ASSERT(word != NULL, COMMAND_IS_NULL);
             table_of_jmps.add_new_obj(word, machine_code.element_access(0));
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("JL", machine_code.pointer);
         }
 
         if (strcmp(word, "JG") == 0){
@@ -437,10 +458,12 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             word = strtok(NULL, delim);
+            MY_ASSERT(word != NULL, COMMAND_IS_NULL);
             table_of_jmps.add_new_obj(word, machine_code.element_access(0));
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("JG", machine_code.pointer);
         }
 
         if (strcmp(word, "JE") == 0){
@@ -449,10 +472,12 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             word = strtok(NULL, delim);
+            MY_ASSERT(word != NULL, COMMAND_IS_NULL);
             table_of_jmps.add_new_obj(word, machine_code.element_access(0));
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("JE", machine_code.pointer);
         }
 
         if (strcmp(word, "JN") == 0){
@@ -461,21 +486,23 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             word = strtok(NULL, delim);
+            MY_ASSERT(word != NULL, COMMAND_IS_NULL);
             table_of_jmps.add_new_obj(word, machine_code.element_access(0));
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
+            ADD_TO_LOG("JN", machine_code.pointer);
         }
 
         if (not_a_command == 1){
 
-            printf("here word = %s\n", word);
             name_of_var = word;
 
             word = strtok(NULL, delim);
+            MY_ASSERT(word != NULL, COMMAND_IS_NULL);
             var_was_def = 0;
 
-            if (strcmp(word, "DB") == 0){ //byte
+            if (strcmp(word, "DB") == 0){ 
 
                 var_was_def = 1;
 
@@ -483,7 +510,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
                 data_pointer += 1;
             }
 
-            if (strcmp(word, "DW") == 0){ //word 2 bytes
+            if (strcmp(word, "DW") == 0){
 
                 var_was_def = 1;
 
@@ -491,7 +518,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
                 data_pointer += 2;
             }
 
-            if (strcmp(word, "DD") == 0){ //double word 4 bytes
+            if (strcmp(word, "DD") == 0){
 
                 var_was_def = 1;
 
@@ -499,22 +526,20 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
                 data_pointer += 4;
             }
 
-            if (strcmp(word, "DMAS") == 0) {//������ �������� ������� ������ 0
+            if (strcmp(word, "DMAS") == 0) {
 
                 var_was_def = 1;
 
                 table_of_vars.add_defin_of_obj(name_of_var, data_pointer);
 
                 word = strtok(NULL, delim);
-                assert(strtod(word, NULL) != 0);
+                MY_ASSERT(word != NULL, COMMAND_IS_NULL);
+                MY_ASSERT(strtod(word, NULL) != 0, WRONG_DEF_OF_MAS);
                 data_pointer += strtod(word, NULL);
             }
 
-            if (var_was_def == 0){
-
-                printf("strange command [%s]??\n", word);
-                exit(3);
-            }
+            MY_ASSERT(var_was_def != 0, WRONG_COMMAND);
+            ADD_TO_LOG("var dif", machine_code.pointer);
         }
 
             word = strtok(NULL, delim);
@@ -530,20 +555,20 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
 
 
 int main() {
-
+    
     char name_of_input_file[MAXLEN] = "input.txt";
     int num_of_comands = 0;
     double* machine_code = assembler(name_of_input_file, &num_of_comands);
 
     FILE* output_file = fopen("machine_commands.bin", "wb");
-    assert(output_file != NULL);
+    MY_ASSERT(output_file != NULL, FILE_IS_NULL);
 
     fwrite(&num_of_comands, sizeof(int), 1, output_file);
-    fwrite(machine_code, sizeof(double), num_of_comands, output_file);
+    MY_ASSERT(fwrite(machine_code, sizeof(double), num_of_comands, output_file) == num_of_comands, BINARY_FILE_TROUBLE);
 
     free(machine_code);
     fclose(output_file);
 
-    printf("returned 0\n");
+    CLOSE_LOG;
     return 0;
 }

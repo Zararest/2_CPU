@@ -10,8 +10,10 @@
 #include <string.h>
 #include <cassert>
 
-
-
+#define NUMBER_B_REGISTERS 3
+#define NUMBER_W_REGISTERS 4
+#define NUMBER_D_REGISTERS 5
+#define NUMBER_P_REGISTERS 2
 
 enum Commands {
                                                    //���������� ����������: //����� ��� ����� ������������

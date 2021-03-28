@@ -15,7 +15,7 @@ assembler.o: assembler.cpp
 
 	
 my_CPU: $(obj_cpu)
-	g++ -o CPU $(obj_cpu)	
+	g++ -o my_CPU $(obj_cpu)	
 
 stack_class.o: headers/stack_class.cpp
 	g++ -c headers/stack_class.cpp
