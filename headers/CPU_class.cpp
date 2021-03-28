@@ -1,5 +1,6 @@
 #include "CPU_class.h"
 
+#define ADD_TO_LOG(msg, command_number) fprintf(CPU_log, "[%i] %s\n", command_number, msg);
 
 CPU_class::CPU_class(int size_of_stack, int size_of_machine_code){
 
@@ -8,6 +9,9 @@ CPU_class::CPU_class(int size_of_stack, int size_of_machine_code){
 
         func_stack = stack_create(SIZE_FUNC_STACK, sizeof(double), 1);
         assert(func_stack != NULL);
+
+        CPU_log = fopen("CPU_log.txt", "w");
+        assert(CPU_log != NULL);
 
         machine_code = (double*) calloc(size_of_machine_code, sizeof(double));
         memory = (unsigned char*) calloc(MEMORY_SIZE, sizeof(unsigned char));
@@ -20,7 +24,7 @@ CPU_class::CPU_class(int size_of_stack, int size_of_machine_code){
 
 CPU_class::~CPU_class(){
 
-        printf("destructor was called\n");
+        fclose(CPU_log);
         stack_destruct(stack);
         free(machine_code);
         free(memory);
@@ -117,18 +121,7 @@ void CPU_class::dump_memory(){
         printf("\n---\n");
     }
 
-void CPU_class::class_clean(){
-
-        stack_destruct(stack);
-        free(machine_code);
-        free(memory);
-        free(byte_segment);
-        free(word_segment);
-        free(double_word_segment);
-        free(segment_private);
-    }
-
-void CPU_class::processor(int num_of_comands){//это надо сунуть в класс
+void CPU_class::processor(int num_of_comands){
 
     int reg_len = 0, reg_number = 0;
     char symbol = 0;
@@ -138,16 +131,18 @@ void CPU_class::processor(int num_of_comands){//это надо сунуть в 
     while ( command_pointer < num_of_comands){
 
         switch (  return_command(0) ){
-    //---------
+    
         case CPU_CALL:
 
-             push_func_stack( (double)( command_pointer + 2) );
-             command_pointer =  return_command(1) + 2;
+            push_func_stack( (double)( command_pointer + 2) );
+            command_pointer =  return_command(1) + 2;
+            ADD_TO_LOG("CALL", command_pointer);
             break;
 
         case CPU_RET:
 
-             command_pointer =  pop_func_stack();
+            command_pointer = (int) pop_func_stack();
+            ADD_TO_LOG("RET", command_pointer);
             break;
 
         case CPU_MOV_RD:
@@ -158,23 +153,24 @@ void CPU_class::processor(int num_of_comands){//это надо сунуть в 
             switch (reg_len){
 
             case byte_len:
-                 byte_segment[reg_number] = (char) return_command(2);
+                byte_segment[reg_number] = (char) return_command(2);
                 break;
 
             case word_len:
-                 word_segment[reg_number] = (short int) return_command(2);
+                word_segment[reg_number] = (short int) return_command(2);
                 break;
 
             case double_word_len:
-                 double_word_segment[reg_number] = (int) return_command(2);
+                double_word_segment[reg_number] = (int) return_command(2);
                 break;
 
             case private_len:
-                 segment_private[reg_number] =  return_command_double(2);
+                segment_private[reg_number] =  return_command_double(2);
                 break;
             }
 
-             increase_pointer(3);
+            increase_pointer(3);
+            ADD_TO_LOG("MOV_RD", command_pointer);
             break;
 
         case CPU_MOV_RV:
@@ -186,23 +182,24 @@ void CPU_class::processor(int num_of_comands){//это надо сунуть в 
             switch (reg_len){
 
             case byte_len:
-                 byte_segment[reg_number] = *((char*)(memory_adress));
+                byte_segment[reg_number] = *((char*)(memory_adress));
                 break;
 
             case word_len:
-                 word_segment[reg_number] = *((short int*)(memory_adress));
+                word_segment[reg_number] = *((short int*)(memory_adress));
                 break;
 
             case double_word_len:
-                 double_word_segment[reg_number] = *((int*)(memory_adress));
+                double_word_segment[reg_number] = *((int*)(memory_adress));
                 break;
 
             case private_len:
-                 segment_private[reg_number] = *((double*)(memory_adress));
+                segment_private[reg_number] = *((double*)(memory_adress));
                 break;
             }
 
-             increase_pointer(4);
+            increase_pointer(4);
+            ADD_TO_LOG("MOV_RV", command_pointer);
             break;
 
         case CPU_MOV_VR:
@@ -230,7 +227,8 @@ void CPU_class::processor(int num_of_comands){//это надо сунуть в 
                 break;
             }
 
-             increase_pointer(4);
+            increase_pointer(4);
+            ADD_TO_LOG("MOV_VR", command_pointer);
             break;
 
         case CPU_PUSH:
@@ -257,8 +255,9 @@ void CPU_class::processor(int num_of_comands){//это надо сунуть в 
                 break;
             }
 
-             push_stack(fir_num);
-             increase_pointer(2);
+            push_stack(fir_num);
+            increase_pointer(2);
+            ADD_TO_LOG("PUSH", command_pointer);
             break;
 
         case CPU_IN:
@@ -270,23 +269,24 @@ void CPU_class::processor(int num_of_comands){//это надо сунуть в 
             switch (reg_len){
 
             case byte_len:
-                 byte_segment[reg_number] = (char) fir_num;
+                byte_segment[reg_number] = (char) fir_num;
                 break;
 
             case word_len:
-                 word_segment[reg_number] = (short int) fir_num;
+                word_segment[reg_number] = (short int) fir_num;
                 break;
 
             case double_word_len:
-                 double_word_segment[reg_number] = (int) fir_num;
+                double_word_segment[reg_number] = (int) fir_num;
                 break;
 
             case private_len:
-                 segment_private[reg_number] = (double) fir_num;
+                segment_private[reg_number] = (double) fir_num;
                 break;
             }
 
-             increase_pointer(2);
+            increase_pointer(2);
+            ADD_TO_LOG("IN", command_pointer);
             break;
 
         case CPU_GET:
@@ -298,110 +298,122 @@ void CPU_class::processor(int num_of_comands){//это надо сунуть в 
             switch (reg_len){
 
             case byte_len:
-                 byte_segment[reg_number] = (char) symbol;
+                byte_segment[reg_number] = (char) symbol;
                 break;
 
             case word_len:
-                 word_segment[reg_number] = (short int) symbol;
+                word_segment[reg_number] = (short int) symbol;
                 break;
 
             case double_word_len:
-                 double_word_segment[reg_number] = (int) symbol;
+                double_word_segment[reg_number] = (int) symbol;
                 break;
 
             case private_len:
-                 segment_private[reg_number] = (double) symbol;
+                segment_private[reg_number] = (double) symbol;
                 break;
             }
 
-             increase_pointer(2);
+            increase_pointer(2);
+            ADD_TO_LOG("GET", command_pointer);
             break;
 
         case NOP:
 
-             increase_pointer(1);
+            increase_pointer(1);
+            ADD_TO_LOG("NOP", command_pointer);
             break;
 
         case CPU_ADD:
 
             sec_num =  pop_stack();
             fir_num =  pop_stack();
-             push_stack(fir_num + sec_num);
-             increase_pointer(1);
+            push_stack(fir_num + sec_num);
+            increase_pointer(1);
+            ADD_TO_LOG("ADD", command_pointer);
             break;
 
         case CPU_SUB:
 
             sec_num =  pop_stack();
             fir_num =  pop_stack();
-             push_stack(fir_num - sec_num);
-             increase_pointer(1);
+            push_stack(fir_num - sec_num);
+            increase_pointer(1);
+            ADD_TO_LOG("SUB", command_pointer);
             break;
 
         case CPU_DIV:
 
             sec_num =  pop_stack();
             fir_num =  pop_stack();
-             push_stack(fir_num / sec_num);
-             increase_pointer(1);
+            push_stack(fir_num / sec_num);
+            increase_pointer(1);
+            ADD_TO_LOG("DIV", command_pointer);
             break;
 
         case CPU_MUL:
 
             sec_num =  pop_stack();
             fir_num =  pop_stack();
-             push_stack(fir_num * sec_num);
-             increase_pointer(1);
+            push_stack(fir_num * sec_num);
+            increase_pointer(1);
+            ADD_TO_LOG("MUL", command_pointer);
             break;
 
         case CPU_FSQRT:
 
             fir_num =  pop_stack();
-             push_stack(sqrt(fir_num));
-             increase_pointer(1);
+            push_stack(sqrt(fir_num));
+            increase_pointer(1);
+            ADD_TO_LOG("FSQRT", command_pointer);
             break;
 
         case CPU_JL:
 
             if ( segment_private[0] < 0){
 
-                 command_pointer =  return_command(1);
+                command_pointer =  return_command(1);
             } else{
 
-                 increase_pointer(2);
+                increase_pointer(2);
             }
+            ADD_TO_LOG("JL", command_pointer);
             break;
 
         case CPU_JG:
 
             if ( segment_private[0] > 0){
 
-                 command_pointer =  return_command(1);
+                command_pointer =  return_command(1);
             } else{
 
-                 increase_pointer(2);
+                increase_pointer(2);
             }
+            ADD_TO_LOG("JG", command_pointer);
             break;
 
         case CPU_JE:
 
             if ( segment_private[0] == 0){
 
-                 command_pointer =  return_command(1);
+                command_pointer =  return_command(1);
             } else{
 
-                 increase_pointer(2);
+                increase_pointer(2);
             }
+            ADD_TO_LOG("JE", command_pointer);
             break;
 
         case CPU_JN:
 
-             command_pointer =  return_command(1);
+            command_pointer =  return_command(1);
+            ADD_TO_LOG("JN", command_pointer);
             break;
 
         case CPU_FUNC_JMP:
 
-             command_pointer =  return_command(1);
+            command_pointer =  return_command(1);
+            ADD_TO_LOG("FUNC_JMP", command_pointer);
             break;
 
         case CPU_CMP:
@@ -409,8 +421,9 @@ void CPU_class::processor(int num_of_comands){//это надо сунуть в 
             sec_num =  pop_stack();
             fir_num =  pop_stack();
 
-             segment_private[0] = sec_num - fir_num;
-             increase_pointer(1);
+            segment_private[0] = sec_num - fir_num;
+            increase_pointer(1);
+            ADD_TO_LOG("CMP", command_pointer);
             break;
 
         case CPU_POP:
@@ -422,50 +435,52 @@ void CPU_class::processor(int num_of_comands){//это надо сунуть в 
             switch (reg_len){
 
             case byte_len:
-                 byte_segment[reg_number] = (char)fir_num;
+                byte_segment[reg_number] = (char)fir_num;
                 break;
 
             case word_len:
-                 word_segment[reg_number] = (short int)fir_num;
+                word_segment[reg_number] = (short int)fir_num;
                 break;
 
             case double_word_len:
-                 double_word_segment[reg_number] = (int)fir_num;
+                double_word_segment[reg_number] = (int)fir_num;
                 break;
 
             case private_len:
-                 segment_private[reg_number] = fir_num;
+                segment_private[reg_number] = fir_num;
                 break;
             }
 
-             increase_pointer(2);
+            increase_pointer(2);
+            ADD_TO_LOG("POP", command_pointer);
             break;
 
         case CPU_OUT:
 
             printf("out: %lf\n",  pop_stack());
-             increase_pointer(1);
+            increase_pointer(1);
+            ADD_TO_LOG("OUT", command_pointer);
             break;
 
         case CPU_OUT_CHR:
 
             printf("%c", (char) pop_stack());
-             increase_pointer(1);
+            increase_pointer(1);
+            ADD_TO_LOG("OUT_CHR", command_pointer);
             break;
 
         case CPU_HLT:
 
             exit(0);
+            ADD_TO_LOG("HLT", command_pointer);
             break;
 
         case END:
 
-             command_pointer = num_of_comands;
+            command_pointer = num_of_comands;
+            ADD_TO_LOG("END", command_pointer);
             break;
         }
-
-    //--------
-
     }
     }
 

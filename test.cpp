@@ -9,5 +9,8 @@ int main(){
 
     if (1 == 1) {printf("yes\n");}
     CREATE_LOG;
-    //my_print("jopa", 10);
+    double a = 10;
+    int b = 0;
+    b = a;
+    printf("int = %i\n", b);
 }

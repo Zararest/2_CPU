@@ -7,11 +7,7 @@ int main(){
 
     int size_of_file = 0;
     FILE* input_file = fopen("machine_commands.bin", "rb");
-
-    if (input_file == NULL)
-    {
-        printf("Can't open file\n");
-    }
+    assert(input_file != NULL);
 
     fread(&size_of_file, sizeof(int), 1, input_file);
 
@@ -21,7 +17,6 @@ int main(){
     fclose(input_file);
 
     CPU.processor(size_of_file);
-
 }
 
 

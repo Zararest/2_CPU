@@ -17,11 +17,16 @@ public:
     my_stack* stack = NULL;
     my_stack* func_stack = NULL;
     int command_pointer = 0;
+    FILE* CPU_log = NULL;
 
     char* byte_segment = NULL;
     short int* word_segment = NULL;
     int* double_word_segment = NULL;
     double* segment_private = NULL;
+
+    CPU_class(const CPU_class&) = delete;
+    
+    CPU_class& operator = (const CPU_class&) = delete;
 
     CPU_class(int, int);
 
@@ -51,8 +56,5 @@ public:
 
     int get_reg_data(double);
 
-    void dump_memory();
-
-    void class_clean();
- 
+    void dump_memory(); 
 };
