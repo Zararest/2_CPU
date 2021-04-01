@@ -1,16 +1,20 @@
 #include <stdio.h>
 #include <iostream>
+#include <string>
+
+#include "headers/list_class.h"
+#include "headers/table_class.h"
 
 #define CREATE_LOG FILE* log_pointer = fopen("log.txt", "w");\
                         printf("FUCK U %d and file %s\n", __LINE__, __FILE__);
 
-#define my_print(name) printf(name);             
+#define my_print(name) printf(name);         
+
+
+
 int main(){
 
-    if (1 == 1) {printf("yes\n");}
-    CREATE_LOG;
-    double a = 10;
-    int b = 0;
-    b = a;
-    printf("int = %i\n", b);
+    list my_list;
+
+    my_list.add_to_root("test", 10);
 }

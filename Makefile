@@ -36,16 +36,3 @@ clean:
 	rm -rf *.o asm
 	rm -rf *.o CPU
 	
-
-
-
-
-
-
-
-
-
-
-
-
-

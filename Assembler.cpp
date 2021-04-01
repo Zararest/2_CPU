@@ -57,7 +57,7 @@ int find_register(char* word) {
                 return -1;
             }
         }
-
+    
         if ( (word[0] == 'D') && (word[2] >= 'A') && (word[2] <= 'E') ) {
 
             if ((word[2] - 'A') <= NUMBER_W_REGISTERS){

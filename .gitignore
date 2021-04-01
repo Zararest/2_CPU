@@ -4,6 +4,7 @@ array_class.o
 assembler.o
 stack_class.o
 CPU_class.o
+CPU.o
 asm
 CPU
 machine_commands.bin
