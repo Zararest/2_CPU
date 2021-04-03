@@ -8,7 +8,7 @@
 
 void disassembler(int number_of_commands, FILE* machine_commands){
 
-    int i = 0, number_of_reg = 1;
+    int i = 0, number_of_reg = 1, id_of_fir_elem = 0, id_of_sec_elem = 0, var_was_def = 0;
     double* array_of_commands = (double*)calloc(1, sizeof(double));
     FILE* output_file = fopen("disassembler.txt", "w");
 
@@ -202,10 +202,53 @@ void disassembler(int number_of_commands, FILE* machine_commands){
         }
     }
 
-    while(list_of_var.number_of_elems() != 0){
+    while(list_of_var.number_of_elems() > 1){
 
-        while()//дописать определние переменнных 
+        id_of_fir_elem = list_of_var.get_id_of_elem_number(1);
+        id_of_sec_elem = list_of_var.get_id_of_elem_number(2);
+        var_was_def = 0;
+
+        switch (id_of_sec_elem - id_of_fir_elem){
+
+            case BYTE_LEN:
+            assert(list_of_var.get_name(id_of_fir_elem) != NULL);
+            fprintf(output_file, "%s DB\n", list_of_var.get_name(id_of_fir_elem));
+            var_was_def = 1;
+            break;
+
+            case WORD_LEN:
+            assert(list_of_var.get_name(id_of_fir_elem) != NULL);
+            fprintf(output_file, "%s DW\n", list_of_var.get_name(id_of_fir_elem));
+            var_was_def = 1;
+            break;
+
+            case DOUBLE_WORD_LEN:
+            assert(list_of_var.get_name(id_of_fir_elem) != NULL);
+            fprintf(output_file, "%s DD\n", list_of_var.get_name(id_of_fir_elem));
+            var_was_def = 1;
+            break;
+
+            case PRIVATE_LEN:
+            assert(list_of_var.get_name(id_of_fir_elem) != NULL);
+            fprintf(output_file, "%s DP\n", list_of_var.get_name(id_of_fir_elem));
+            var_was_def = 1;
+            break;
+
+            if (var_was_def == 0){
+
+                assert(list_of_var.get_name(id_of_fir_elem) != NULL);
+                fprintf(output_file, "%s DMAS %i\n", list_of_var.get_name(id_of_fir_elem), id_of_sec_elem - id_of_fir_elem); 
+            }
+
+        }
     }
+
+    id_of_fir_elem = list_of_var.get_id_of_elem_number(1);
+    if ((list_of_var.number_of_elems() == 1) && (list_of_var.get_name(id_of_fir_elem) != NULL)){
+
+        fprintf(output_file, "%s DMAS is undef\n", list_of_var.get_name(id_of_fir_elem));
+    }
+
 }
 
 
@@ -214,7 +257,7 @@ int main(){
     init();
 
     int size_of_file = 0;
-    FILE* input_file = fopen("machine_commands.bin", "rb");
+    FILE* input_file = fopen("machine_commands.bin", "rb");//узнать про ссылки в с++
     assert(input_file != NULL);
 
     fread(&size_of_file, sizeof(int), 1, input_file);

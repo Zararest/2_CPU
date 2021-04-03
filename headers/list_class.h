@@ -51,6 +51,8 @@ public:
 
     char* get_name(int);
 
+    int get_id_of_elem_number(int);
+
     void name_func();
 
     void name_var();

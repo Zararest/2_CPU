@@ -18,6 +18,11 @@
 #define CODE_OF_MOV_RV 24
 #define CODE_OF_MOV_RD 25
 
+#define BYTE_LEN 1
+#define WORD_LEN 2
+#define DOUBLE_WORD_LEN 4
+#define PRIVATE_LEN 8
+
                 
                   
 typedef struct elem_struct{

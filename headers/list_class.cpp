@@ -270,6 +270,26 @@ char* list::get_name(int elem_id){
 
 }
 
+int list::get_id_of_elem_number(int number_of_elem){
+
+    elem* tmp = root;
+    int i = 0;
+
+    while((tmp->next != NULL) && (i < number_of_elem)){
+
+        tmp = tmp->next;
+        i++;
+    }
+
+    if ((tmp->next == NULL) && (i != number_of_elem)){
+
+        return -228;
+    }else{
+
+        return tmp->id;
+    }
+}
+
 int list::number_of_elems(){
 
     elem* tmp = root;
