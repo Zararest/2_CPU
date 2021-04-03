@@ -3,12 +3,14 @@
 array_of_commands::array_of_commands(int size){
 
         pointer = 0;
+        counter = 0;
         commands = (double*) calloc(size, sizeof(double));
     }
 
 void array_of_commands::add_command(int pointer_modificator, double new_command){
 
         commands[pointer + pointer_modificator] = new_command;
+        counter++;
     }
 
 void array_of_commands::increase_pointer(int increment){
@@ -28,4 +30,6 @@ double* array_of_commands::return_array_of_commands(){
 
 array_of_commands::~array_of_commands(){
 
+        pointer = 0;
+        counter = 0;
     }

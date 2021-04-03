@@ -1,11 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <cassert>
 
 #define CLEAN_ALL for (int j = 1; j <= 12; j++){\
-                      free(command_names[j])}\
+                      free(commands_names[j]);}\
                   for (int j = 1; j <= 14; j++){\
-                      free(reg_names[j].reg_name)}\
+                      free(reg_names[j].reg_name);}\
+
+#define COMMAND_WITH_ONE_PARAM 1
+#define COMMAND_WITH_TWO_PARAM 13
+#define CODE_OF_FIRST_JMP 17
+#define CODE_OF_LAST_JMP 20
+#define CODE_OF_CALL 21
+#define CODE_OF_FUNC 22
+#define CODE_OF_MOV_VR 23
+#define CODE_OF_MOV_RV 24
+#define CODE_OF_MOV_RD 25
+
                 
                   
 typedef struct elem_struct{
@@ -36,8 +48,8 @@ void init(){
     commands_names[12] = "ADD\n";
     commands_names[13] = "PUSH "; 
     commands_names[14] = "POP "; 
-    commands_names[15] = "IN\n"; 
-    commands_names[16] = "GET\n"; 
+    commands_names[15] = "IN"; 
+    commands_names[16] = "GET"; 
     commands_names[17] = "JL "; 
     commands_names[18] = "JG "; 
     commands_names[19] = "JE "; 

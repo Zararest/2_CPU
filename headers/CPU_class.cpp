@@ -57,6 +57,8 @@ int CPU_class::get_reg_data(double reg_number_double){
                 return (int)segment_private[reg_number];
                 break;
             }
+
+    return 0;
 }
 
 double* CPU_class::machine_code_access(){
@@ -129,9 +131,9 @@ void CPU_class::processor(int num_of_comands){
     double fir_num = 0, sec_num = 0;
 
     while ( command_pointer < num_of_comands){
-
+        
         switch (  return_command(0) ){
-    
+            
         case CPU_CALL:
 
             push_func_stack( (double)( command_pointer + 2) );
@@ -177,7 +179,7 @@ void CPU_class::processor(int num_of_comands){
 
             reg_len = ( return_command(1) / 10) % 10;
             reg_number =  return_command(1) % 10;
-            memory_adress = memory_adress =  memory +  return_command(2) +  get_reg_data( return_command(3));
+            memory_adress =  memory +  return_command(2) +  get_reg_data( return_command(3) ); //??????
 
             switch (reg_len){
 
@@ -206,7 +208,7 @@ void CPU_class::processor(int num_of_comands){
 
             reg_len = ( return_command(3) / 10) % 10;
             reg_number =  return_command(3) % 10;
-            memory_adress =  memory +  return_command(1) +  get_reg_data( return_command(2));
+            memory_adress =  memory +  return_command(1) +  get_reg_data( return_command(2) );
 
             switch (reg_len){
 

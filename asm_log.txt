@@ -1,1 +1,47 @@
-In file |assembler.cpp| in line[457] exit atatus[7]
+[2] function
+[5] MOV
+[5] var dif
+[5] var dif
+[8] MOV
+[12] MOV
+[12] linc_dif
+[14] GET
+[18] MOV
+[22] MOV
+[25] MOV
+[27] PUSH
+[29] PUSH
+[30] ADD
+[32] POP
+[36] MOV
+[38] PUSH
+[40] PUSH
+[41] CMP
+[43] JL
+[45] JG
+[46] RET
+[48] function
+[51] MOV
+[51] var dif
+[54] MOV
+[58] MOV
+[58] linc_dif
+[62] MOV
+[66] MOV
+[68] PUSH
+[69] OUT_CHAR
+[72] MOV
+[74] PUSH
+[76] PUSH
+[77] ADD
+[79] POP
+[83] MOV
+[85] PUSH
+[87] PUSH
+[88] CMP
+[90] JL
+[92] JG
+[93] RET
+[95] CALL
+[97] CALL
+[98] END

@@ -9,16 +9,17 @@ typedef struct elem_struct{
 
     char* name = NULL;
     int id = 0;
-    elem* next = NULL;
+    struct elem_struct* next = NULL;
 } elem;
+
+class wtf{
+    int dafuq = 0;
+
+};
 
 class list{
 
-    elem* root = NULL;
-    int number_elems = 0;
-    FILE* log = NULL;
-    int counter = 0;
-
+public:
     list();
 
     ~list();
@@ -26,6 +27,13 @@ class list{
     list(const list&) = delete;
     
     list& operator = (const list&) = delete;
+
+//private:
+
+    elem* root = NULL;
+    int number_elems = 0;
+    FILE* log = NULL;
+    int counter = 0;
 
     void add_to_root(char*, int);
 
@@ -35,9 +43,21 @@ class list{
 
     void delete_top();
 
-    void delete_elem(int);
+    int delete_elem(int);
 
     void add_before_greater_elem(char*, int);
 
     void dump();
+
+    char* get_name(int);
+
+    void name_func();
+
+    void name_var();
+
+    void name_link();
+
+    int check_dublicate(int);
+
+    int number_of_elems();
 };

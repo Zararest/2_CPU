@@ -460,6 +460,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
 
             word = strtok(NULL, delim);
     }
+    //*num_of_comands = machine_code.counter;
 
     table_of_jmps.match_arrays();
     table_of_vars.match_arrays();

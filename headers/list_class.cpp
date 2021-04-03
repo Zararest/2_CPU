@@ -31,14 +31,19 @@ list::list(){
     root->next = NULL;
 
     log = fopen("list_log.txt", "w");
+    //log = stdout;
 }
 
 list::~list(){
 
     elem* prev_elem = NULL;
     elem* tmp = root;
+    counter++;
 
     while(tmp->next != NULL){
+
+        printf("first_elem\n");//падает на освобождении имени корня
+
         free(tmp->name);
         free(prev_elem);
         prev_elem = tmp;
@@ -57,6 +62,7 @@ list::~list(){
 void list::add_to_root(char* elem_name, int elem_id){
 
     elem* tmp = (elem*)calloc(1, sizeof(elem));
+    counter++;
     tmp->name = my_memcpy(elem_name);
     tmp->id = elem_id;
 
@@ -68,6 +74,7 @@ void list::add_to_root(char* elem_name, int elem_id){
 void list::add_to_top(char* elem_name, int elem_id){
 
     elem* tmp = root;
+    counter++;
 
     while(tmp->next != NULL){
 
@@ -85,6 +92,7 @@ void list::add_to_top(char* elem_name, int elem_id){
 void list::delete_root(){
 
     elem* tmp = NULL;
+    counter++;
 
     if (root->next != NULL){
         
@@ -101,6 +109,7 @@ void list::delete_root(){
 void list::delete_top(){
 
     elem* tmp = root;
+    counter++;
 
     if (root->next != NULL){
 
@@ -114,10 +123,34 @@ void list::delete_top(){
     } 
 }
 
+int list::delete_elem(int elem_id){
+
+    elem* tmp = root;
+    elem* prev_elem = root;
+    counter++;
+
+    while((tmp->next != NULL) && (tmp->id != elem_id)){
+        prev_elem = tmp;
+        tmp = tmp->next;
+    }
+
+    if ((tmp->next == NULL) && (tmp->id != elem_id)){
+
+        return -1;
+    }else{
+
+        prev_elem = tmp->next;
+        free(tmp->name);
+        free(tmp);
+        return 0;
+    }
+}
+
 void list::add_before_greater_elem(char* elem_name, int elem_id){ //if compar equal to 1, programm working
 
     elem* tmp = root;
     elem* prev_elem = root;
+    counter++;
 
     while((tmp->id < elem_id) && (tmp->next != NULL)){
 
@@ -139,6 +172,7 @@ void list::dump(){
 
     elem* tmp = root;
     int i = 1;
+    counter++;
 
     fprintf(log, "[0] Root: name:|%s| id:[%i]\n", root->name, root->id);
 
@@ -146,7 +180,106 @@ void list::dump(){
 
         tmp = tmp->next;
         ADD_TO_DUMP(i, tmp->name, tmp->id)
+        i++;
     }
 
     fprintf(log, "Dump end\n");
+}
+
+void list::name_var(){
+
+    elem* tmp = root;
+    counter++;
+    int i = 0;
+
+    while(tmp->next != NULL){
+
+        tmp = tmp->next;
+        tmp->name = (char*)calloc(6, sizeof(char));
+        tmp->name = "var_";
+        tmp->name[4] = 'A' + i;
+        i++;
+    }
+}
+
+
+
+void list::name_func(){
+
+    elem* tmp = root;
+    int i = 0;
+
+    while(tmp->next != NULL){
+
+        tmp = tmp->next;
+        tmp->name = (char*)calloc(7, sizeof(char));
+        tmp->name = "func_";
+        tmp->name[5] = 'A' + i;
+        i++;
+    }
+}
+
+void list::name_link(){
+
+    elem* tmp = root;
+    int i = 0;
+
+    while(tmp->next != NULL){
+
+        tmp = tmp->next;
+        tmp->name = (char*)calloc(7, sizeof(char));
+        tmp->name = "link_";
+        tmp->name[5] = 'A' + i;
+        i++;
+    }
+}
+
+int list::check_dublicate(int elem_id){
+
+    elem* tmp =root;
+    int i = 0;
+
+    while(tmp->next != NULL){
+
+        tmp = tmp->next;
+
+        if (tmp->id == elem_id){
+            i++;
+        }
+    }
+
+    return i;
+}
+
+char* list::get_name(int elem_id){
+
+    elem* tmp = root;
+
+    while((tmp->next != NULL) && (tmp->id != elem_id)){
+
+        tmp = tmp->next;
+    }
+
+    if ((tmp->next == NULL) && (tmp->id != elem_id)){
+
+        return NULL;
+    }else{
+
+        return my_memcpy(tmp->name);
+    }
+
+}
+
+int list::number_of_elems(){
+
+    elem* tmp = root;
+    int i = 0;
+
+    while(tmp->next != NULL){
+
+        i++;
+        tmp = tmp->next;
+    }
+
+    return i;
 }
