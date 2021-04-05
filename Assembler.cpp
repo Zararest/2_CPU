@@ -460,7 +460,9 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
 
             word = strtok(NULL, delim);
     }
-    //*num_of_comands = machine_code.counter;
+    *num_of_comands = machine_code.pointer;
+
+    printf("in asm in func asm num_of_co= %i\n", *num_of_comands);
 
     table_of_jmps.match_arrays();
     table_of_vars.match_arrays();
@@ -475,12 +477,14 @@ int main() {
     
     char name_of_input_file[MAXLEN] = "input.txt";
     int num_of_comands = 0;
+    printf("in asm number_of commands = %i\n", num_of_comands);
     double* machine_code = assembler(name_of_input_file, &num_of_comands);
 
     FILE* output_file = fopen("machine_commands.bin", "wb");
     MY_ASSERT(output_file != NULL, FILE_IS_NULL);
 
     fwrite(&num_of_comands, sizeof(int), 1, output_file);
+    
     MY_ASSERT(fwrite(machine_code, sizeof(double), num_of_comands, output_file) == num_of_comands, BINARY_FILE_TROUBLE);
 
     free(machine_code);

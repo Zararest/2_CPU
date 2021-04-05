@@ -12,7 +12,6 @@ class array_of_commands{
 public:
     double* commands = NULL;
     int pointer = 0;
-    int counter = 0;
 
     array_of_commands(const array_of_commands&) = delete;
 

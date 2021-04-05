@@ -30,8 +30,8 @@ list::list(){
     root->name = "root";
     root->next = NULL;
 
-    log = fopen("list_log.txt", "w");
-    //log = stdout;
+    //log = fopen("list_log.txt", "w");
+    log = stdout;
 }
 
 list::~list(){
@@ -195,14 +195,12 @@ void list::name_var(){
     while(tmp->next != NULL){
 
         tmp = tmp->next;
-        tmp->name = (char*)calloc(6, sizeof(char));
-        tmp->name = "var_";
+        //tmp->name = (char*)calloc(6, sizeof(char));
+        tmp->name = my_memcpy("var_|");
         tmp->name[4] = 'A' + i;
         i++;
     }
 }
-
-
 
 void list::name_func(){
 
@@ -212,8 +210,8 @@ void list::name_func(){
     while(tmp->next != NULL){
 
         tmp = tmp->next;
-        tmp->name = (char*)calloc(7, sizeof(char));
-        tmp->name = "func_";
+        //tmp->name = (char*)calloc(7, sizeof(char));
+        tmp->name = my_memcpy("func_|");
         tmp->name[5] = 'A' + i;
         i++;
     }
@@ -227,8 +225,8 @@ void list::name_link(){
     while(tmp->next != NULL){
 
         tmp = tmp->next;
-        tmp->name = (char*)calloc(7, sizeof(char));
-        tmp->name = "link_";
+        //tmp->name = (char*)calloc(7, sizeof(char));
+        tmp->name = my_memcpy("link_|");
         tmp->name[5] = 'A' + i;
         i++;
     }

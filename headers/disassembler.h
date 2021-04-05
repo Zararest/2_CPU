@@ -1,3 +1,6 @@
+#ifndef DISASSEMBLER_H
+#define DISASSEMBLER_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -25,14 +28,14 @@
 
                 
                   
-typedef struct elem_struct{
+typedef struct elem_reg_struct{
 
     char* reg_name = NULL;
     int reg_number = 0;
-} elem;
+} elem_reg;
 
-char** commands_names = (char**)calloc(13, sizeof(char*));
-elem* reg_names = (elem*)calloc(15, sizeof(elem));
+char** commands_names = (char**)calloc(27, sizeof(char*));
+elem_reg* reg_names = (elem_reg*)calloc(15, sizeof(elem_reg));
 
 void init(){
 
@@ -99,3 +102,4 @@ void init(){
     reg_names[14].reg_number = 151;
 }
 
+#endif

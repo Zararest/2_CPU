@@ -10,13 +10,21 @@
 
 #define my_print(name) printf(name);  */      
 
+int sqrt(int& val_func){
+
+    val_func = 0;
+
+    return 1;
+}
 
 
 int main(){
 
-    list test_list;
+    //list test_list;
+    int val = 10;
 
-    test_list.add_to_root("test", 10);
-    test_list.add_to_root("test2", 12);
-    test_list.dump();
+    printf("sqrt = %i and val = %i\n", sqrt(val), val);
+    //test_list.add_to_root("test", 10);
+    //test_list.add_to_root("test2", 12);
+    //test_list.dump();
 }

@@ -1,7 +1,7 @@
 obj_assembler = table_class.o array_class.o assembler.o
 obj_cpu = stack_class.o CPU_class.o CPU.o
 obj_test = list_class.o test.o
-obj_disasm = list_class.o disassebler.o
+obj_disasm = list_class.o disassembler.o
 
 asm: $(obj_assembler)
 	g++ -o asm $(obj_assembler)
@@ -30,13 +30,13 @@ CPU.0: CPU.cpp CPU_class.cpp
 
 
 disasm: $(obj_disasm)
-	g++ -o $(disasm)
+	g++ -o disasm $(obj_disasm)
 
 list_class.o: headers/list_class.cpp
 	g++ -c headers/list_class.cpp
 
-disassebler.o: disassebler.cpp
-	g++ -c disassebler.cpp
+disassembler.o: disassembler.cpp
+	g++ -c disassembler.cpp
 
 
 

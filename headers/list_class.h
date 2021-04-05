@@ -1,3 +1,6 @@
+#ifndef LIST_CLASS_H
+#define LIST_CLASS_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -12,10 +15,6 @@ typedef struct elem_struct{
     struct elem_struct* next = NULL;
 } elem;
 
-class wtf{
-    int dafuq = 0;
-
-};
 
 class list{
 
@@ -63,3 +62,5 @@ public:
 
     int number_of_elems();
 };
+
+#endif
