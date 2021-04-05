@@ -26,12 +26,11 @@ list::list(){
 
     root = (elem*)calloc(1, sizeof(elem));
     root->id = -228;
-    root->name = (char*)calloc(5, sizeof(char));
-    root->name = "root";
+    root->name = my_memcpy("root");
     root->next = NULL;
 
-    //log = fopen("list_log.txt", "w");
-    log = stdout;
+    log = fopen("list_log.txt", "w");
+    //log = stdout;
 }
 
 list::~list(){
@@ -54,7 +53,7 @@ list::~list(){
     free(tmp);
 
     fprintf(log, "destructor was called\n");
-    fclose(log);
+    //fclose(log);
 }
 
 

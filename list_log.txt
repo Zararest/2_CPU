@@ -1,0 +1,6 @@
+[1] elem have been added after greater elem name:|(null)| id:[50]
+[2] elem have been added after greater elem name:|(null)| id:[0]
+[3] elem have been added after greater elem name:|(null)| id:[54]
+[5] first elem have been deleted  name:|var_A| id:[0]
+[6] first elem have been deleted  name:|var_B| id:[54]
+destructor was called

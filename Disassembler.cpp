@@ -10,8 +10,8 @@ void disassembler(int number_of_commands, FILE* machine_commands){
 
     int i = 0, number_of_reg = 1, id_of_fir_elem = 0, id_of_sec_elem = 0, var_was_def = 0;
     double* array_of_commands = (double*)calloc(number_of_commands, sizeof(double));
-    //FILE* output_file = fopen("disassembler.txt", "w");
-    FILE* output_file = stdout;
+    FILE* output_file = fopen("disassembler.txt", "w");
+    //FILE* output_file = stdout;
 
     list list_of_var;
     list list_of_funcs;
@@ -203,7 +203,8 @@ printf("nit here\n");
     }
 
     while(list_of_var.number_of_elems() > 1){
-        
+        printf("number of rlrms = %i\n", list_of_var.number_of_elems());
+
         id_of_fir_elem = list_of_var.get_id_of_elem_number(1);
         id_of_sec_elem = list_of_var.get_id_of_elem_number(2);
         var_was_def = 0;
@@ -241,6 +242,8 @@ printf("nit here\n");
             }
 
         }
+
+        list_of_var.delete_root();
     }
 
     id_of_fir_elem = list_of_var.get_id_of_elem_number(1);
@@ -263,10 +266,9 @@ int main(){
     fread(&size_of_file, sizeof(int), 1, input_file);
     printf("size of file = %i\n", size_of_file);
     disassembler(size_of_file, input_file);
-
-    fclose(input_file);
-
     
+    fclose(input_file);
+    //printf("here\n");
     CLEAN_ALL
     return 0;
 }
