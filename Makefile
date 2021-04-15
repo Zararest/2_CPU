@@ -47,7 +47,7 @@ test: $(obj_test)
 .PHONY : git_commit
 git_commit:
 	git add . 
-	git commit -m "This was automatic commit"
+	git commit -a -m 'First remote commit'
 
 .PHONY : clean
 clean:
