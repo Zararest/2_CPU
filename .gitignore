@@ -3,10 +3,15 @@ table_class.o
 array_class.o
 assembler.o
 stack_class.o
+list_class.o
+disassembler.o
 CPU_class.o
 CPU.o
+test.o
 asm
+test
 CPU
+test.cpp
 machine_commands.bin
 .vscode/tasks.json
 .vscode/launch.json
