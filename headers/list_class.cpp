@@ -53,7 +53,7 @@ list::~list(){
     free(tmp);
 
     fprintf(log, "destructor was called\n");
-    //fclose(log);
+    fclose(log);
 }
 
 

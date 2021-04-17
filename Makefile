@@ -46,7 +46,7 @@ test: $(obj_test)
 
 .PHONY : git_commit
 git_commit: 
-	git commit -a -m 'First remote commit'
+	git commit -a -m 'Auto commit'
 
 .PHONY : clean
 clean:
