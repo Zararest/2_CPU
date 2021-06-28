@@ -1,43 +1,43 @@
 function func_B
 function func_B
-MOV B_B 10.000000
-MOV D_A 0.000000
-MOV var_CD_A
+MOV B_B  10.000000
+MOV D_A  0.000000
+MOV var_C D_A 
 @link_B:
-GETB_A
-MOV D_Avar_CMOV var_A[D_A] B_A
-MOV D_B 1.000000
-PUSH D_B
-PUSH D_A
+GET  B_A 
+MOV D_A  var_C MOV var_A [D_A ] B_A 
+MOV D_B  1.000000
+PUSH  D_B 
+PUSH  D_A 
 ADD
-POP D_A
-MOV var_CD_A
-PUSH B_A
-PUSH B_B
+ POP  D_A 
+MOV var_C D_A 
+PUSH  B_A 
+PUSH  B_B 
 CMP
-JL link_B
-JG link_B
+ JL  link_B
+JG  link_B
 RET
-function func_A
-MOV B_B 10.000000
-MOV D_A 0.000000
-MOV var_BD_A
-MOV D_Avar_BMOV B_Avar_A [D_A]
-PUSH B_A
+ function func_A
+MOV B_B  10.000000
+MOV D_A  0.000000
+MOV var_B D_A 
+MOV D_A  var_B MOV B_A  var_A  [D_A ]
+PUSH  B_A 
 OUT_CHR
-MOV D_B 1.000000
-PUSH D_B
-PUSH D_A
+ MOV D_B  1.000000
+PUSH  D_B 
+PUSH  D_A 
 ADD
-POP D_A
-MOV var_BD_A
-PUSH B_A
-PUSH B_B
+ POP  D_A 
+MOV var_B D_A 
+PUSH  B_A 
+PUSH  B_B 
 CMP
-JL link_A
-JG link_A
+ JL  link_A
+JG  link_A
 RET
-CALL func_B
-CALL func_A
+ CALL  func_B
+CALL  func_A
 END
-var_C DMAS is undef
+ var_C DMAS is undef

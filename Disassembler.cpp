@@ -97,13 +97,13 @@ void disassembler(int number_of_commands, FILE* machine_commands){
 
         if ((array_of_commands[i] >= COMMAND_WITH_ONE_PARAM) && (array_of_commands[i] < COMMAND_WITH_TWO_PARAM)){
 
-            fprintf(output_file, "%s", commands_names[(int)array_of_commands[i]]);
+            fprintf(output_file, "%s ", commands_names[(int)array_of_commands[i]]);
             i++;
         }
 
         if ((array_of_commands[i] >= COMMAND_WITH_TWO_PARAM) && (array_of_commands[i] < CODE_OF_FIRST_JMP)){
 
-            fprintf(output_file, "%s", commands_names[(int)array_of_commands[i]]);
+            fprintf(output_file, "%s ", commands_names[(int)array_of_commands[i]]);
 
             GET_REG_NUMBER(array_of_commands[i + 1])
 
@@ -115,7 +115,7 @@ void disassembler(int number_of_commands, FILE* machine_commands){
         
         if ((array_of_commands[i] >= CODE_OF_FIRST_JMP) && (array_of_commands[i] <= CODE_OF_LAST_JMP)){
 
-           fprintf(output_file, "%s", commands_names[(int)array_of_commands[i]]);
+           fprintf(output_file, "%s ", commands_names[(int)array_of_commands[i]]);
 
            assert(list_of_links.get_name((int)array_of_commands[i + 1]) != NULL);
            fprintf(output_file, "%s\n", list_of_links.get_name((int)array_of_commands[i + 1])); 
@@ -125,7 +125,7 @@ void disassembler(int number_of_commands, FILE* machine_commands){
         
         if (array_of_commands[i] == CODE_OF_CALL){
 
-            fprintf(output_file, "%s", commands_names[(int)array_of_commands[i]]);
+            fprintf(output_file, "%s ", commands_names[(int)array_of_commands[i]]);
             assert(list_of_funcs.get_name((int)array_of_commands[i + 1]) != NULL);
             fprintf(output_file, "%s\n", list_of_funcs.get_name((int)array_of_commands[i + 1])); 
 
@@ -145,7 +145,7 @@ void disassembler(int number_of_commands, FILE* machine_commands){
 
             fprintf(output_file, "MOV ");
             assert(list_of_var.get_name((int)array_of_commands[i + 1]) != NULL);
-            fprintf(output_file, "%s", list_of_var.get_name((int)array_of_commands[i + 1]));
+            fprintf(output_file, "%s ", list_of_var.get_name((int)array_of_commands[i + 1]));
 
             if (array_of_commands[i + 2] != 0){
 
@@ -168,12 +168,12 @@ void disassembler(int number_of_commands, FILE* machine_commands){
             fprintf(output_file, "MOV ");
             GET_REG_NUMBER(array_of_commands[i + 1])
 
-            fprintf(output_file, "%s", reg_names[number_of_reg].reg_name);
+            fprintf(output_file, "%s ", reg_names[number_of_reg].reg_name);
 
             number_of_reg = 1;
 
             assert(list_of_var.get_name((int)array_of_commands[i + 2]) != NULL);
-            fprintf(output_file, "%s", list_of_var.get_name((int)array_of_commands[i + 2])); 
+            fprintf(output_file, "%s ", list_of_var.get_name((int)array_of_commands[i + 2])); 
 
             if (array_of_commands[i + 3] != 0){
 
@@ -202,7 +202,7 @@ void disassembler(int number_of_commands, FILE* machine_commands){
     }
 
     while(list_of_var.number_of_elems() > 1){
-        printf("number of rlrms = %i\n", list_of_var.number_of_elems());
+        //printf("number of rlrms = %i\n", list_of_var.number_of_elems());
 
         id_of_fir_elem = list_of_var.get_id_of_elem_number(1);
         id_of_sec_elem = list_of_var.get_id_of_elem_number(2);
@@ -259,11 +259,10 @@ int main(){
     init();
 
     int size_of_file = 0;
-    FILE* input_file = fopen("machine_commands.bin", "rb");//узнать про ссылки в с++
+    FILE* input_file = fopen("machine_commands.bin", "rb");
     assert(input_file != NULL);
 
     fread(&size_of_file, sizeof(int), 1, input_file);
-    printf("size of file = %i\n", size_of_file);
     disassembler(size_of_file, input_file);
     
     fclose(input_file);

@@ -54,7 +54,7 @@ void init(){
     commands_names[13] = my_memcpy("PUSH "); 
     commands_names[14] = my_memcpy("POP "); 
     commands_names[15] = my_memcpy("IN"); 
-    commands_names[16] = my_memcpy("GET"); 
+    commands_names[16] = my_memcpy("GET "); 
     commands_names[17] = my_memcpy("JL "); 
     commands_names[18] = my_memcpy("JG "); 
     commands_names[19] = my_memcpy("JE "); 
@@ -65,33 +65,33 @@ void init(){
     commands_names[24] = my_memcpy("MOV ");
     commands_names[25] = my_memcpy("MOV ");
 
-    reg_names[1].reg_name = my_memcpy("B_A");
+    reg_names[1].reg_name = my_memcpy("B_A ");
     reg_names[1].reg_number = 110;
-    reg_names[2].reg_name = my_memcpy("B_B");
+    reg_names[2].reg_name = my_memcpy("B_B ");
     reg_names[2].reg_number = 111;
-    reg_names[3].reg_name = my_memcpy("B_C");
+    reg_names[3].reg_name = my_memcpy("B_C ");
     reg_names[3].reg_number = 112;
-    reg_names[4].reg_name = my_memcpy("W_A");
+    reg_names[4].reg_name = my_memcpy("W_A ");
     reg_names[4].reg_number = 120;
-    reg_names[5].reg_name = my_memcpy("W_B");
+    reg_names[5].reg_name = my_memcpy("W_B ");
     reg_names[5].reg_number = 121;   
-    reg_names[6].reg_name = my_memcpy("W_C");
+    reg_names[6].reg_name = my_memcpy("W_C ");
     reg_names[6].reg_number = 122;
-    reg_names[7].reg_name = my_memcpy("W_D");
+    reg_names[7].reg_name = my_memcpy("W_D ");
     reg_names[7].reg_number = 123;
-    reg_names[8].reg_name = my_memcpy("D_A");
+    reg_names[8].reg_name = my_memcpy("D_A ");
     reg_names[8].reg_number = 140;
-    reg_names[9].reg_name = my_memcpy("D_B");
+    reg_names[9].reg_name = my_memcpy("D_B ");
     reg_names[9].reg_number = 141;
-    reg_names[10].reg_name = my_memcpy("D_C");
+    reg_names[10].reg_name = my_memcpy("D_C ");
     reg_names[10].reg_number = 142;
-    reg_names[11].reg_name = my_memcpy("D_D");
+    reg_names[11].reg_name = my_memcpy("D_D ");
     reg_names[11].reg_number = 143;
-    reg_names[12].reg_name = my_memcpy("D_E");
+    reg_names[12].reg_name = my_memcpy("D_E ");
     reg_names[12].reg_number = 144;
-    reg_names[13].reg_name = my_memcpy("P_F");
+    reg_names[13].reg_name = my_memcpy("P_F ");
     reg_names[13].reg_number = 150;
-    reg_names[14].reg_name = my_memcpy("P_R");
+    reg_names[14].reg_name = my_memcpy("P_R ");
     reg_names[14].reg_number = 151;
 }
 

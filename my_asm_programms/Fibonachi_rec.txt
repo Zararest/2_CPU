@@ -1,0 +1,61 @@
+/*
+рекурсивный поиск чисел фибоначи. номер числа задается с клавиатуры
+(первые два числа фиб. это 1)
+*/
+function fib	
+
+	MOV D_A i 
+	PUSH D_A
+	MOV D_A 1
+	PUSH D_A
+	ADD
+	POP D_A
+	MOV i D_A
+	
+	MOV D_B sec_num 
+	MOV D_A fir_num 
+	MOV sec_num  D_A
+	MOV fir_num  D_B
+
+	MOV D_A fir_num 
+	PUSH D_A
+	MOV D_A sec_num 
+	PUSH D_A
+	ADD
+	POP D_A
+	MOV sec_num D_A
+
+	MOV D_A i
+	PUSH D_A
+	MOV D_A count
+	PUSH D_A
+	CMP
+
+	JL end
+	CALL fib
+
+	@end:
+	RET
+
+i DD
+fir_num DD
+sec_num DD
+count DD
+
+MOV D_A 1
+MOV fir_num D_A
+MOV sec_num D_A
+
+MOV D_A 3
+MOV i D_A
+
+IN D_A
+MOV count D_A
+
+CALL fib
+
+MOV D_A sec_num
+PUSH D_A
+OUT 
+
+END

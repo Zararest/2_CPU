@@ -1,0 +1,13 @@
+/*
+тест функций
+*/
+function test
+	
+	MOV D_A 5
+	PUSH D_A
+	OUT
+RET
+
+CALL test
+
+END

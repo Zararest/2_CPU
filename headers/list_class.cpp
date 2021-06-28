@@ -29,7 +29,8 @@ list::list(){
     root->name = my_memcpy("root");
     root->next = NULL;
 
-    log = fopen("list_log.txt", "w");
+    log = fopen("logs/list_log.txt", "w");
+    assert(log != NULL);
     //log = stdout;
 }
 
@@ -40,8 +41,6 @@ list::~list(){
     counter++;
 
     while(tmp->next != NULL){
-
-        printf("first_elem\n");//падает на освобождении имени корня
 
         free(tmp->name);
         free(prev_elem);
@@ -100,9 +99,7 @@ void list::delete_root(){
         root->next = tmp->next;
         free(tmp->name);
         free(tmp);
-    }
-
-    
+    } 
 }
 
 void list::delete_top(){

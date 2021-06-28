@@ -10,7 +10,7 @@ CPU_class::CPU_class(int size_of_stack, int size_of_machine_code){
         func_stack = stack_create(SIZE_FUNC_STACK, sizeof(double), 1);
         assert(func_stack != NULL);
 
-        CPU_log = fopen("CPU_log.txt", "w");
+        CPU_log = fopen("logs/CPU_log.txt", "w");
         assert(CPU_log != NULL);
 
         machine_code = (double*) calloc(size_of_machine_code, sizeof(double));

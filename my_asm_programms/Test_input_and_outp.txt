@@ -1,0 +1,69 @@
+function scanf 
+	
+	MOV B_B 10
+	mas DMAS 50
+	i DD	
+
+	MOV D_A 0
+	MOV i D_A
+
+	@start_loop:
+	GET B_A
+	
+	MOV D_A i
+	MOV [D_A] B_A
+	
+	MOV D_B 1
+	PUSH D_B
+	PUSH D_A
+	ADD
+
+	POP D_A
+	MOV i D_A
+
+	PUSH B_A
+	PUSH B_B
+	CMP
+
+	JL start_loop
+	JG start_loop	
+
+	RET
+
+function printf
+	
+	MOV B_B 10
+	j DD
+
+	MOV D_A 0
+	MOV j D_A
+	
+	@start_loop_prnt:
+	
+	MOV D_A j
+	MOV B_A mas [D_A]
+	PUSH B_A
+	OUT_CHR
+	
+	MOV D_B 1
+	PUSH D_B
+	PUSH D_A
+	ADD
+
+	POP D_A
+	MOV j D_A
+
+	PUSH B_A
+	PUSH B_B
+	CMP
+
+	JL start_loop_prnt
+	JG start_loop_prnt	
+
+	RET
+
+CALL scanf
+CALL printf
+
+
+END

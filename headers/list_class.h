@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <cassert>
 
 #define ADD_TO_LOG(line, name, id) fprintf(log, "[%i] %s name:|%s| id:[%i]\n", counter, line, name, id);
 #define ADD_TO_DUMP(position, name, id) fprintf(log, "[%i] |%s| id:[%i]\n", position, name, id);

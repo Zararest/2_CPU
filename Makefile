@@ -51,5 +51,7 @@ git_commit:
 .PHONY : clean
 clean:
 	rm -rf *.o asm
-	rm -rf *.o CPU
+	rm -rf *.o my_CPU
+	rm -rf *.o test
+	rm -rf *.o disasm
 	

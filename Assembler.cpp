@@ -3,7 +3,7 @@
 #include "headers/array_class.h"
 #include "headers/log.h"
 
-CREATE_LOG("asm_log.txt");
+CREATE_LOG("logs/asm_log.txt");
 
 #define COMMAND_WITH_NO_PARAM(command_number) machine_code.add_command(0, command_number);\
                                               machine_code.increase_pointer(1);\
@@ -29,6 +29,12 @@ CREATE_LOG("asm_log.txt");
 int length(char* line){
 
     int i = 0;
+
+    if (line == NULL){
+
+        return 0;
+    }
+
     while (line[i] != '\0'){
 
         i++;
@@ -38,6 +44,10 @@ int length(char* line){
 
 int find_register(char* word) {
 
+    if (word == NULL){
+
+        return -1;
+    }
     if ( (length(word) == 3) && (word[1] == '_') ) {
 
         if ( (word[0] == 'B') && (word[2] >= 'A') && (word[2] <= 'C') ) {
@@ -143,13 +153,15 @@ char* name_of_modif(char* word){
         i++;
     }
 
-    MY_ASSERT(i != 7, WRONG_MODIFICATOR);
-    word[i] = '\0';
-    return word;
+    if (i == 7){
+
+        return NULL;
+    } else{
+
+        word[i] = '\0';
+        return word;
+    }   
 }
-
-
-
 
 double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
 
@@ -243,9 +255,18 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
                     machine_code.increase_pointer(1);
                 } else {
 
-                    table_of_vars.add_new_obj(word, machine_code.element_access(0));
-                    machine_code.add_command(-2, CPU_MOV_RV);
-                    machine_code.increase_pointer(1);
+                    if (name_of_modif(word) == NULL){
+
+                        table_of_vars.add_new_obj(word, machine_code.element_access(0));
+                        machine_code.add_command(-2, CPU_MOV_RV);
+                        machine_code.increase_pointer(1);
+                    } else{
+
+                        machine_code.add_command(0, 0);
+                        machine_code.add_command(-2, CPU_MOV_RV);
+                        machine_code.increase_pointer(1);
+                    }
+                    
 
                     if (word[length(word) + 1] == '['){
 
@@ -265,9 +286,18 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
                 }
             } else {
 
-                machine_code.add_command(-1, CPU_MOV_VR);
-                table_of_vars.add_new_obj(word, machine_code.element_access(0));
-                machine_code.increase_pointer(1);
+                if (name_of_modif(word) == NULL){
+
+                    machine_code.add_command(-1, CPU_MOV_VR);
+                    table_of_vars.add_new_obj(word, machine_code.element_access(0));
+                    machine_code.increase_pointer(1);
+                } else{
+
+                    machine_code.add_command(-1, CPU_MOV_VR);
+                    machine_code.add_command(0, 0);
+                    machine_code.increase_pointer(1);
+                }
+                
 
                 if (word[length(word) + 1] == '['){
 
@@ -462,8 +492,6 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
     }
     *num_of_comands = machine_code.pointer;
 
-    printf("in asm in func asm num_of_co= %i\n", *num_of_comands);
-
     table_of_jmps.match_arrays();
     table_of_vars.match_arrays();
     table_of_func.match_arrays();
@@ -477,7 +505,6 @@ int main() {
     
     char name_of_input_file[MAXLEN] = "input.txt";
     int num_of_comands = 0;
-    printf("in asm number_of commands = %i\n", num_of_comands);
     double* machine_code = assembler(name_of_input_file, &num_of_comands);
 
     FILE* output_file = fopen("machine_commands.bin", "wb");
