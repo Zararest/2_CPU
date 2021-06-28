@@ -39,10 +39,16 @@ disassembler.o: disassembler.cpp
 	g++ -c disassembler.cpp
 
 
-
 test: $(obj_test)
 	g++ -o test $(obj_test)
 
+
+
+.PHONY : project
+project: 
+	make asm
+	make my_CPU
+	make disasm
 
 .PHONY : git_commit
 git_commit: 
