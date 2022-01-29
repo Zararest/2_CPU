@@ -1,9 +1,9 @@
-#include "headers/commands.h"
-#include "headers/table_class.h"
-#include "headers/array_class.h"
-#include "headers/log.h"
+#include "src/headers/commands.h"
+#include "src/headers/table_class.h"
+#include "src/headers/array_class.h"
+#include "src/headers/log.h"
 
-CREATE_LOG("logs/asm_log.txt");
+CREATE_LOG("../logs/asm_log.txt");
 
 #define COMMAND_WITH_NO_PARAM(command_number) machine_code.add_command(0, command_number);\
                                               machine_code.increase_pointer(1);\
@@ -196,7 +196,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(2);
 
             not_a_command = 0;
-            ADD_TO_LOG("function", machine_code.pointer);
+            //ADD_TO_LOG("function", machine_code.pointer);
         }
 
         if (strcmp(word, "RET") == 0){
@@ -207,7 +207,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             *(prev_func_jmp) = (double)machine_code.pointer;
 
             not_a_command = 0;
-            ADD_TO_LOG("RET", machine_code.pointer);
+            //ADD_TO_LOG("RET", machine_code.pointer);
         }
 
         if (strcmp(word, "CALL") == 0){
@@ -221,7 +221,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             machine_code.increase_pointer(1);
 
             not_a_command = 0;
-            ADD_TO_LOG("CALL", machine_code.pointer);
+            //ADD_TO_LOG("CALL", machine_code.pointer);
         }
 
         if (word[0] == '@'){
@@ -232,7 +232,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             table_of_jmps.add_defin_of_obj(word + 1, (double)machine_code.pointer);
 
             not_a_command = 0;
-            ADD_TO_LOG("linc_dif", machine_code.pointer);
+            //ADD_TO_LOG("linc_dif", machine_code.pointer);
         }
 
         if (strcmp(word, "MOV") == 0) {
@@ -323,121 +323,121 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             }
 
             not_a_command = 0;
-            ADD_TO_LOG("MOV", machine_code.pointer);
+            //ADD_TO_LOG("MOV", machine_code.pointer);
         }
 
         if (strcmp(word, "PUSH") == 0){
 
             COMMAND_WITH_REG_PARAM(CPU_PUSH);
-            ADD_TO_LOG("PUSH", machine_code.pointer);
+            //ADD_TO_LOG("PUSH", machine_code.pointer);
         }
 
         if (strcmp(word, "POP") == 0){
 
             COMMAND_WITH_REG_PARAM(CPU_POP);
-            ADD_TO_LOG("POP", machine_code.pointer);
+            //ADD_TO_LOG("POP", machine_code.pointer);
         }
 
         if (strcmp(word, "IN") == 0){
 
             COMMAND_WITH_REG_PARAM(CPU_IN);
-            ADD_TO_LOG("IN", machine_code.pointer);
+            //ADD_TO_LOG("IN", machine_code.pointer);
         }
 
         if (strcmp(word, "GET") == 0){
 
             COMMAND_WITH_REG_PARAM(CPU_GET);
-            ADD_TO_LOG("GET", machine_code.pointer);
+            //ADD_TO_LOG("GET", machine_code.pointer);
         }
 
         if (strcmp(word, "ADD") == 0){
 
             COMMAND_WITH_NO_PARAM(CPU_ADD);
-            ADD_TO_LOG("ADD", machine_code.pointer);
+            //ADD_TO_LOG("ADD", machine_code.pointer);
         }
 
         if (strcmp(word, "SUB") == 0){
 
             COMMAND_WITH_NO_PARAM(CPU_SUB);
-            ADD_TO_LOG("SUB", machine_code.pointer);
+            //ADD_TO_LOG("SUB", machine_code.pointer);
         }
 
         if (strcmp(word, "DIV") == 0){
 
             COMMAND_WITH_NO_PARAM(CPU_DIV);
-            ADD_TO_LOG("DIV", machine_code.pointer);
+            //ADD_TO_LOG("DIV", machine_code.pointer);
         }
 
         if (strcmp(word, "MUL") == 0){
 
             COMMAND_WITH_NO_PARAM(CPU_MUL);
-            ADD_TO_LOG("MUL", machine_code.pointer);
+            //ADD_TO_LOG("MUL", machine_code.pointer);
         }
 
         if (strcmp(word, "CMP") == 0){
 
             COMMAND_WITH_NO_PARAM(CPU_CMP);
-            ADD_TO_LOG("CMP", machine_code.pointer);
+            //ADD_TO_LOG("CMP", machine_code.pointer);
         }
 
         if (strcmp(word, "OUT") == 0){
 
             COMMAND_WITH_NO_PARAM(CPU_OUT);
-            ADD_TO_LOG("OUT", machine_code.pointer);
+            //ADD_TO_LOG("OUT", machine_code.pointer);
         }
 
         if (strcmp(word, "OUT_CHR") == 0){
 
             COMMAND_WITH_NO_PARAM(CPU_OUT_CHR);
-            ADD_TO_LOG("OUT_CHAR", machine_code.pointer);
+            //ADD_TO_LOG("OUT_CHAR", machine_code.pointer);
         }
 
         if (strcmp(word, "HLT") == 0){
 
             COMMAND_WITH_NO_PARAM(CPU_HLT);
-            ADD_TO_LOG("HLT", machine_code.pointer);
+            //ADD_TO_LOG("HLT", machine_code.pointer);
         }
 
         if (strcmp(word, "NOP") == 0){
 
             COMMAND_WITH_NO_PARAM(NOP);
-            ADD_TO_LOG("NOP", machine_code.pointer);
+            //ADD_TO_LOG("NOP", machine_code.pointer);
         }
 
         if (strcmp(word, "END") == 0){
 
             COMMAND_WITH_NO_PARAM(END);
-            ADD_TO_LOG("END", machine_code.pointer);
+            //ADD_TO_LOG("END", machine_code.pointer);
         }
 
         if (strcmp(word, "FSQRT") == 0){
 
             COMMAND_WITH_NO_PARAM(CPU_FSQRT);
-            ADD_TO_LOG("FSQRT", machine_code.pointer);
+            //ADD_TO_LOG("FSQRT", machine_code.pointer);
         }
 
         if (strcmp(word, "JL") == 0){
 
             COMMAND_JUMP(CPU_JL);
-            ADD_TO_LOG("JL", machine_code.pointer);
+            //ADD_TO_LOG("JL", machine_code.pointer);
         }
 
         if (strcmp(word, "JG") == 0){
 
             COMMAND_JUMP(CPU_JG);
-            ADD_TO_LOG("JG", machine_code.pointer);
+            //ADD_TO_LOG("JG", machine_code.pointer);
         }
 
         if (strcmp(word, "JE") == 0){
 
             COMMAND_JUMP(CPU_JE);
-            ADD_TO_LOG("JE", machine_code.pointer);
+            //ADD_TO_LOG("JE", machine_code.pointer);
         }
 
         if (strcmp(word, "JN") == 0){
 
             COMMAND_JUMP(CPU_JN);
-            ADD_TO_LOG("JN", machine_code.pointer);
+            //ADD_TO_LOG("JN", machine_code.pointer);
         }
 
         if (not_a_command == 1){
@@ -485,7 +485,7 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
             }
 
             MY_ASSERT(var_was_def != 0, WRONG_COMMAND);
-            ADD_TO_LOG("var dif", machine_code.pointer);
+            //ADD_TO_LOG("var dif", machine_code.pointer);
         }
 
             word = strtok(NULL, delim);
@@ -503,11 +503,11 @@ double* assembler(char name_of_input_file[MAXLEN], int* num_of_comands) {
 
 int main() {
     
-    char name_of_input_file[MAXLEN] = "input.txt";
+    char name_of_input_file[MAXLEN] = "../bin/input.txt";
     int num_of_comands = 0;
     double* machine_code = assembler(name_of_input_file, &num_of_comands);
 
-    FILE* output_file = fopen("machine_commands.bin", "wb");
+    FILE* output_file = fopen("../bin/machine_commands.bin", "wb");
     MY_ASSERT(output_file != NULL, FILE_IS_NULL);
 
     fwrite(&num_of_comands, sizeof(int), 1, output_file);
@@ -517,6 +517,6 @@ int main() {
     free(machine_code);
     fclose(output_file);
 
-    CLOSE_LOG;
+    //CLOSE_LOG;
     return 0;
 }

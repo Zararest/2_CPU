@@ -1,4 +1,4 @@
-#include "array_class.h"
+#include "headers/array_class.h"
 
 array_of_commands::array_of_commands(int size){
 

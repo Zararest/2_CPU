@@ -1,4 +1,4 @@
-#include "stack_class.h"
+#include "headers/stack_class.h"
 
 //-------------этого не должно быть здесь 
 int push(my_stack* _stack, double val)
@@ -10,7 +10,8 @@ int push(my_stack* _stack, double val)
     */
 
     if ( silent_ok(_stack) != 0)
-    {
+    {   
+        fprintf(stderr, "silent ok problems\n");
         exit(4);
     }
 

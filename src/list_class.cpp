@@ -1,4 +1,4 @@
-#include "list_class.h"
+#include "headers/list_class.h"
 
 char* my_memcpy(char* line){
 
@@ -29,7 +29,7 @@ list::list(){
     root->name = my_memcpy("root");
     root->next = NULL;
 
-    log = fopen("logs/list_log.txt", "w");
+    log = fopen("../logs/list_log.txt", "w");
     assert(log != NULL);
     //log = stdout;
 }
@@ -66,7 +66,7 @@ void list::add_to_root(char* elem_name, int elem_id){
 
     tmp->next = root->next;
     root->next = tmp;
-    ADD_TO_LOG("elem have been added to the root", tmp->name, tmp->id)
+    //ADD_TO_LOG("elem have been added to the root", tmp->name, tmp->id)
 }
 
 void list::add_to_top(char* elem_name, int elem_id){
@@ -84,7 +84,7 @@ void list::add_to_top(char* elem_name, int elem_id){
     tmp->next->id = elem_id;
     tmp->next->next = NULL;
 
-    ADD_TO_LOG("elem have been added to the top", tmp->name, tmp->id)
+    //ADD_TO_LOG("elem have been added to the top", tmp->name, tmp->id)
 }
 
 void list::delete_root(){
@@ -95,7 +95,7 @@ void list::delete_root(){
     if (root->next != NULL){
         
         tmp = root->next;
-        ADD_TO_LOG("first elem have been deleted ", tmp->name, tmp->id)
+        //ADD_TO_LOG("first elem have been deleted ", tmp->name, tmp->id)
         root->next = tmp->next;
         free(tmp->name);
         free(tmp);
@@ -113,7 +113,7 @@ void list::delete_top(){
 
             tmp = tmp->next;
         }
-        ADD_TO_LOG("last elem have been deleted", tmp->name, tmp->id)
+        //ADD_TO_LOG("last elem have been deleted", tmp->name, tmp->id)
         free(tmp->name);
         free(tmp);
     } 
@@ -159,7 +159,7 @@ void list::add_before_greater_elem(char* elem_name, int elem_id){ //if compar eq
     prev_elem->next->name = my_memcpy(elem_name);
     prev_elem->next->id = elem_id;
     prev_elem->next->next = tmp;
-    ADD_TO_LOG("elem have been added after greater elem", prev_elem->next->name, prev_elem->next->id)
+    //ADD_TO_LOG("elem have been added after greater elem", prev_elem->next->name, prev_elem->next->id)
 }
 
 void list::dump(){

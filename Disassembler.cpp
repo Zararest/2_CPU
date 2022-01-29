@@ -1,5 +1,5 @@
-#include "headers/disassembler.h"
-#include "headers/list_class.h"
+#include "src/headers/disassembler.h"
+#include "src/headers/list_class.h"
 
 #define GET_REG_NUMBER(digit) while((number_of_reg < 15) && (reg_names[number_of_reg].reg_number != digit )){\
                             number_of_reg++;\

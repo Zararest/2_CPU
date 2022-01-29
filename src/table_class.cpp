@@ -1,4 +1,4 @@
-#include "table_class.h" 
+#include "headers/table_class.h" 
 
 table_of_matches::table_of_matches(){
 
@@ -58,7 +58,7 @@ void table_of_matches::dump_table(){
         printf("table of undefined objects:\n");
         while (i < undef_pointer){
 
-            printf("\t %i) name: |%s| position: |%i|\n", i, array_undef_obj[i].name, array_undef_obj[i].position_of_elem);
+            printf("\t %i) name: |%s| position: |%lf|\n", i, array_undef_obj[i].name, array_undef_obj[i].position_of_elem);
             i++;
         }
 
@@ -85,6 +85,7 @@ void table_of_matches::match_arrays(){
 
             if (j == def_pointer){
 
+                fprintf(stderr, "matching problems exit status 0\n");
                 exit(1);
             } else{
 
